@@ -18,6 +18,7 @@ class PhotoGrid extends Component {
   render () {
     const { imageProps } = this.props
     const source = _.take(this.props.source, 5)
+    const sourcePath = this.props.sourcePath
     const firstViewImages = []
     const secondViewImages = []
     const firstItemCount = source.length === 5 ? 2 : 1
@@ -61,7 +62,8 @@ class PhotoGrid extends Component {
               onPress={() => this.props.onPressImage && this.props.onPressImage(image)}>
               <ImageLoad
                 style={[styles.image, { width: firstImageWidth, height: firstImageHeight }, this.props.imageStyle]}
-                source={typeof image === 'string' ? { uri: image } : image}
+                source={typeof image === 'string' ? { uri: image } : image.uri ?
+                        image : {...image, uri: image[sourcePath]}}
                 {...imageProps}
               />
             </TouchableOpacity>
@@ -76,7 +78,8 @@ class PhotoGrid extends Component {
                   {this.props.source.length > 5 && index === secondViewImages.length - 1 ? (
                     <ImageBackground
                       style={[styles.image, { width: secondImageWidth, height: secondImageHeight }, this.props.imageStyle]}
-                      source={typeof image === 'string' ? { uri: image } : image}
+                      source={typeof image === 'string' ? { uri: image } : image.uri ?
+                              image : {...image, uri: image[sourcePath]}}
                     >
                       <View style={styles.lastWrapper}>
                         <Text style={[styles.textCount, this.props.textStyles]}>+{this.props.source.length - 5}</Text>
@@ -85,7 +88,8 @@ class PhotoGrid extends Component {
                   )
                     : <ImageLoad
                       style={[styles.image, { width: secondImageWidth, height: secondImageHeight }, this.props.imageStyle]}
-                      source={typeof image === 'string' ? { uri: image } : image}
+                      source={typeof image === 'string' ? { uri: image } : image.uri ?
+                            image : {...image, uri: image[sourcePath]}}
                       {...imageProps}
                     />}
                 </TouchableOpacity>
@@ -106,7 +110,8 @@ PhotoGrid.prototypes = {
   imageStyle: PropTypes.object,
   onPressImage: PropTypes.func,
   ratio: PropTypes.float,
-  imageProps: PropTypes.object
+  imageProps: PropTypes.object,
+  sourcePath: PropTypes.string
 }
 
 PhotoGrid.defaultProps = {
